@@ -30,10 +30,12 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 35),
-            const Text('Introduce your username'),
+            const Text('Introduce your username', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 5),
             const CustomTextField(placeholderText: 'Username', isObscure: false,),
             const SizedBox(height: 35),
-            const Text('Introduce your password'),
+            const Text('Introduce your password', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 5),
             const CustomTextField(placeholderText: 'Password', isObscure: true,),
             const SizedBox(height: 35),
             ElevatedButton(
@@ -110,6 +112,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _controller.clear();
             },
           ),
