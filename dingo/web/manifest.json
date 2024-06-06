@@ -1,6 +1,6 @@
 {
-    "name": "dingo",
-    "short_name": "dingo",
+    "name": "projeto",
+    "short_name": "projeto",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
