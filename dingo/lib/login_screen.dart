@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'password_recovery_screen.dart';
+import 'main_screen_placeholder.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  void onLoginTap(context) {
+    Navigator.push(
+      context, MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +39,62 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 35),
             const Text('Introduce your username', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 5),
-            const CustomTextField(placeholderText: 'Username', isObscure: false,),
-            const SizedBox(height: 35),
+            const CustomTextField(placeholderText: 'Username', isObscure: false, customPrefixIcon: Icon(Icons.person),),
+            const SizedBox(height: 20),
             const Text('Introduce your password', style: TextStyle(fontSize: 20)),
             const SizedBox(height: 5),
-            const CustomTextField(placeholderText: 'Password', isObscure: true,),
-            const SizedBox(height: 35),
+            const CustomTextField(placeholderText: 'Password', isObscure: true, customPrefixIcon: Icon(Icons.key),),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 120,
+                  height: 60,
+                  margin: const EdgeInsets.all(5),
+                  child: ElevatedButton.icon(
+                    onPressed: () { onLoginTap(context); },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 239, 239, 239),
+                      padding: const EdgeInsets.all(0),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero
+                      ),
+                    ),
+                    icon: Image.asset('lib/assets/google_icon.png'),
+                    label: const Text(
+                      'Login with Google',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 120,
+                  height: 60,
+                  margin: const EdgeInsets.all(5),
+                  child: ElevatedButton.icon(
+                    onPressed: () { onLoginTap(context); },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 203, 230, 254),
+                      padding: const EdgeInsets.all(0),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero
+                      ),
+                    ),
+                    icon: Image.asset('lib/assets/facebook_icon.png'),
+                    label: const Text(
+                      'Login with Facebook',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () { onLoginTap(context); },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(254, 66, 254, 157), 
                 padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
@@ -58,6 +113,7 @@ class LoginScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   decoration: TextDecoration.underline,
+                  color: Colors.blue,
                 ),
               )
             ),
@@ -71,11 +127,13 @@ class LoginScreen extends StatelessWidget {
 class CustomTextField extends StatefulWidget {
   final String placeholderText;
   final bool isObscure;
+  final Icon customPrefixIcon;
 
   const CustomTextField({
     super.key,
     required this.placeholderText,
     required this.isObscure,
+    required this.customPrefixIcon,
   });
 
   @override
@@ -106,9 +164,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         autocorrect: false,
         obscureText: widget.isObscure,
         decoration: InputDecoration(
-          prefixIcon: !widget.isObscure
-              ? const Icon(Icons.person)
-              : const Icon(Icons.key),
+          prefixIcon: widget.customPrefixIcon,
           suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {
