@@ -74,18 +74,17 @@ class LoginScreen extends StatelessWidget {
                           isObscure: true,
                           customPrefixIcon: Icon(Icons.key),
                         ),
-                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 120,
+                              width: 200,
                               height: 60,
                               margin: const EdgeInsets.all(5),
                               child: ElevatedButton.icon(
                                 onPressed: () { onLoginTap(context); },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color.fromARGB(255, 239, 239, 239),
+                                  backgroundColor: Colors.white,
                                   padding: const EdgeInsets.all(0),
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero
@@ -94,27 +93,6 @@ class LoginScreen extends StatelessWidget {
                                 icon: Image.asset('lib/assets/google_icon.png'),
                                 label: const Text(
                                   'Login with Google',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 120,
-                              height: 60,
-                              margin: const EdgeInsets.all(5),
-                              child: ElevatedButton.icon(
-                                onPressed: () { onLoginTap(context); },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color.fromARGB(255, 203, 230, 254),
-                                  padding: const EdgeInsets.all(0),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero
-                                  ),
-                                ),
-                                icon: Image.asset('lib/assets/facebook_icon.png'),
-                                label: const Text(
-                                  'Login with Facebook',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 14),
                                 ),
