@@ -11,9 +11,18 @@ class MainScreenPlaceholder extends StatelessWidget {
         centerTitle: true,
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () { Navigator.pop(context); },
-          child: const Text('Go back'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Settings'),
+            ),
+            ElevatedButton(
+              onPressed: () { Navigator.pop(context); },
+              child: const Text('Go back'),
+            ),
+          ],
         ),
       ),  
     );
