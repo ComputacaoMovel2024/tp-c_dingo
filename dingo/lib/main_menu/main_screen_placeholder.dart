@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../settings/settings_page.dart';
+
 class MainScreenPlaceholder extends StatelessWidget {
   const MainScreenPlaceholder({super.key});
 
@@ -15,7 +17,12 @@ class MainScreenPlaceholder extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage())
+                );
+              },
               child: const Text('Settings'),
             ),
             ElevatedButton(

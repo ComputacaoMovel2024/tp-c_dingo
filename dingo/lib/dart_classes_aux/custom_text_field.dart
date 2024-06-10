@@ -17,9 +17,10 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  late TextEditingController _controller;
+  late TextEditingController _controller; //Controla o texto dentro do TextField
 
   @override
+  //Inicializar o controlador de texto
   void initState() {
     super.initState();
     _controller = TextEditingController();
@@ -45,7 +46,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           prefixIcon: widget.customPrefixIcon,
           suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
-            onPressed: () {
+            onPressed: () { //Limpar o texto dentro do TextField
               FocusScope.of(context).requestFocus(FocusNode());
               _controller.clear();
             },

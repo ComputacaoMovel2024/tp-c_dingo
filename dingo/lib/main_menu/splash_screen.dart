@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'dart:async';
-import 'package:dingo/login_screen.dart';
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,6 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
+    //Timer para se conseguir observar o Splash Screen
+    //Poderá ser trocado mais tarde
     Timer(
       const Duration(seconds: 20),
       () => Navigator.pushReplacement(
@@ -32,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
+            child: Image.asset( //Encaixar a imagem de fundo no ecrã
               'lib/assets/background_image.png',
               fit: BoxFit.cover,
             ),
@@ -41,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
+                Container( 
                   width: 200,
                   height: 75,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -70,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(
                   width: 75,
                   height: 75,
-                  child: CircularProgressIndicator(
+                  child: CircularProgressIndicator( //Feedback do loading da aplicação - Puramente estético por agora
                     color: Color.fromARGB(255, 0, 255, 8),
                     strokeWidth: 6,
                   ),
@@ -82,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       context, MaterialPageRoute(builder: (context) => const LoginScreen()),
                     );
                   },
-                  child: const Text('Skip'),
+                  child: const Text('Skip'), //Para debugging e para não esperar os 20 segundos
                 ),
                 Container(
                   width: 200,
