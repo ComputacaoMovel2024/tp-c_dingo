@@ -87,6 +87,49 @@ class SettingsPage extends StatelessWidget {
                         indent: 40,
                         endIndent: 40,
                       ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 247, 105, 138),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Logout',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 53, 100),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Close Application',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
