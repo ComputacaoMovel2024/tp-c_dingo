@@ -12,7 +12,14 @@ class PasswordRecoveryPage extends StatefulWidget {
 }
 
 class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
+  late TextEditingController _emailController;
   bool _showCustomText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+  }
 
   void _addCustomText() {
     setState(() {
@@ -22,7 +29,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
 
   @override
   void dispose() {
-    _showCustomText = false;
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -49,7 +56,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                 ),
                 centerTitle: true,
                 backgroundColor: Colors.transparent,
-                elevation: 0, 
+                elevation: 0,
               ),
               Expanded(
                 child: Center(
@@ -66,10 +73,11 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 25),
-                      const CustomTextField(
+                      CustomTextField(
                         placeholderText: 'Email',
                         isObscure: false,
-                        customPrefixIcon: Icon(Icons.email),
+                        customPrefixIcon: const Icon(Icons.email),
+                        controller: _emailController, // Pass the controller here
                       ),
                       const SizedBox(height: 25),
                       ElevatedButton(
@@ -82,10 +90,15 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                         child: const Text('Send'),
                       ),
                       if (_showCustomText)
-                        const Text(
-                        'An email has been sent',
-                        style: TextStyle(fontSize: 16),
-                      ),
+                        _emailController.text.isNotEmpty
+                          ? const Text(
+                              'An email has been sent',
+                              style: TextStyle(fontSize: 16),
+                            )
+                          : const Text(
+                              'Please type a valid email',
+                              style: TextStyle(fontSize: 16),
+                            ),
                     ],
                   ),
                 ),

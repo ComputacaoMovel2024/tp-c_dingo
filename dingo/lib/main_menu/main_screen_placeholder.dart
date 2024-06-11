@@ -11,6 +11,7 @@ class MainScreenPlaceholder extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Main Menu'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

@@ -6,12 +6,37 @@ import 'main_screen_placeholder.dart';
 
 import 'dart:ui' as ui;
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  void onLoginTap(context) {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController _usernameController;
+  late TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void onLoginTap(BuildContext context) {
+    _usernameController.clear();
+    _passwordController.clear();
     Navigator.push(
-      context, MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
+      context,
+      MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
     );
   }
 
@@ -29,6 +54,7 @@ class LoginScreen extends StatelessWidget {
           Column(
             children: [
               AppBar(
+                automaticallyImplyLeading: false,
                 title: const Text(
                   'Login',
                   style: TextStyle(
@@ -70,52 +96,54 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       const Text('Introduce your username', style: TextStyle(fontSize: 20)),
                       const SizedBox(height: 5),
-                      const CustomTextField(
+                      CustomTextField(
                         placeholderText: 'Username',
                         isObscure: false,
-                        customPrefixIcon: Icon(Icons.person),
+                        customPrefixIcon: const Icon(Icons.person),
+                        controller: _usernameController, // Pass the controller here
                       ),
                       const SizedBox(height: 20),
                       const Text('Introduce your password', style: TextStyle(fontSize: 20)),
                       const SizedBox(height: 5),
-                      const CustomTextField(
+                      CustomTextField(
                         placeholderText: 'Password',
                         isObscure: true,
-                        customPrefixIcon: Icon(Icons.key),
+                        customPrefixIcon: const Icon(Icons.key),
+                        controller: _passwordController, // Pass the controller here
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 60,
-                            margin: const EdgeInsets.all(5),
-                            child: ElevatedButton.icon(
-                              onPressed: () { onLoginTap(context); },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 5,
-                                backgroundColor: Colors.white,
-                                padding: const EdgeInsets.all(0),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero
-                                ),
-                              ),
-                              icon: Image.asset('lib/assets/google_icon.png'),
-                              label: const Text(
-                                'Login with Google',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 14),
-                              ),
+                      const SizedBox(height: 5),
+                      Center(
+                        child: Container(
+                          width: 200,
+                          height: 60,
+                          margin: const EdgeInsets.all(5),
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              onLoginTap(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero),
+                            ),
+                            icon: Image.asset('lib/assets/google_icon.png'),
+                            label: const Text(
+                              'Login with Google',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () { onLoginTap(context); },
+                        onPressed: () {
+                          onLoginTap(context);
+                        },
                         style: ElevatedButton.styleFrom(
                           elevation: 5,
-                          backgroundColor: const Color.fromARGB(254, 66, 254, 157), 
+                          backgroundColor: const Color.fromARGB(254, 66, 254, 157),
                           padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
                         ),
                         child: const Text('Login'),
@@ -123,8 +151,11 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 5),
                       GestureDetector(
                         onTap: () {
+                          _usernameController.clear();
+                          _passwordController.clear();
                           Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => const PasswordRecoveryPage()),
+                            context,
+                            MaterialPageRoute(builder: (context) => const PasswordRecoveryPage()),
                           );
                         },
                         child: const Text(
@@ -134,7 +165,7 @@ class LoginScreen extends StatelessWidget {
                             decoration: TextDecoration.underline,
                             color: Color.fromARGB(255, 0, 33, 60),
                           ),
-                        )
+                        ),
                       ),
                     ],
                   ),
