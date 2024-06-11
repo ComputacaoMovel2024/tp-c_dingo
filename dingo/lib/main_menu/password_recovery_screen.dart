@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:dingo/dart_classes_aux/custom_text_field.dart';
 
+import 'dart:ui' as ui;
+
 class PasswordRecoveryPage extends StatefulWidget {
   const PasswordRecoveryPage({super.key});
 
@@ -30,9 +32,9 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset( //Encaixar a imagem de fundo no ecrã todo
-              'lib/assets/background_image.png',
-              fit: BoxFit.cover,
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+              child: Image.asset('lib/assets/background_image.png', fit: BoxFit.cover),
             ),
           ),
           Column(
@@ -73,6 +75,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                       ElevatedButton(
                         onPressed: _addCustomText,
                         style: ElevatedButton.styleFrom(
+                          elevation: 5,
                           backgroundColor: const Color.fromARGB(254, 66, 254, 157),
                           padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
                         ),

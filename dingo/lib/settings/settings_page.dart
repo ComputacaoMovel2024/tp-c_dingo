@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:dingo/dart_classes_aux/custom_slider.dart';
 
+import 'dart:ui' as ui;
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -11,9 +13,9 @@ class SettingsPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Positioned.fill(
-            child: Image.asset(
-              'lib/assets/background_image.png',
-              fit: BoxFit.cover,
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+              child: Image.asset('lib/assets/background_image.png', fit: BoxFit.cover),
             ),
           ),
           Column(
@@ -94,6 +96,13 @@ class SettingsPage extends StatelessWidget {
                           height: 60,
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                offset: Offset(0, 3),
+                                blurRadius: 2.0
+                              ),
+                            ],
                             color: const Color.fromARGB(255, 247, 105, 138),
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -116,6 +125,13 @@ class SettingsPage extends StatelessWidget {
                           height: 60,
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                offset: Offset(0, 3),
+                                blurRadius: 2.0
+                              ),
+                            ],
                             color: const Color.fromARGB(255, 255, 53, 100),
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -163,6 +179,13 @@ class CustomSettingsButton extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 3),
+              blurRadius: 2.0
+            ),
+          ],
           color: const Color.fromARGB(255, 202, 231, 255),
           borderRadius: BorderRadius.circular(30),
         ),

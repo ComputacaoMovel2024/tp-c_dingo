@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'login_screen.dart';
 
+import 'dart:ui' as ui;
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -34,9 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset( //Encaixar a imagem de fundo no ecrã
-              'lib/assets/background_image.png',
-              fit: BoxFit.cover,
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+              child: Image.asset('lib/assets/background_image.png', fit: BoxFit.cover),
             ),
           ),
           Center(

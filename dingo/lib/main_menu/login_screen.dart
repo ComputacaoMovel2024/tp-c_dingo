@@ -4,6 +4,8 @@ import 'package:dingo/dart_classes_aux/custom_text_field.dart';
 import 'password_recovery_screen.dart';
 import 'main_screen_placeholder.dart';
 
+import 'dart:ui' as ui;
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -18,10 +20,10 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill( //Encaixar a imagem de fundo no ecrã todo
-            child: Image.asset(
-              'lib/assets/background_image.png',
-              fit: BoxFit.cover,
+          Positioned.fill(
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+              child: Image.asset('lib/assets/background_image.png', fit: BoxFit.cover),
             ),
           ),
           Column(
@@ -91,6 +93,7 @@ class LoginScreen extends StatelessWidget {
                             child: ElevatedButton.icon(
                               onPressed: () { onLoginTap(context); },
                               style: ElevatedButton.styleFrom(
+                                elevation: 5,
                                 backgroundColor: Colors.white,
                                 padding: const EdgeInsets.all(0),
                                 shape: const RoundedRectangleBorder(
@@ -111,6 +114,7 @@ class LoginScreen extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () { onLoginTap(context); },
                         style: ElevatedButton.styleFrom(
+                          elevation: 5,
                           backgroundColor: const Color.fromARGB(254, 66, 254, 157), 
                           padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
                         ),
