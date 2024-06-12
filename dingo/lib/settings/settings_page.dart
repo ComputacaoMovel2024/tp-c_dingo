@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:dingo/dart_classes_aux/custom_slider.dart';
+
 import '../main_menu/login_screen.dart';
 
 import 'profile_page.dart';
+import 'language_page.dart';
 
 import 'dart:ui' as ui;
 
@@ -69,7 +71,9 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.language, size: 30),
                         settingsText: 'Change Language',
                         backgroundColor: const Color.fromARGB(255, 202, 231, 255),
-                        onButtonPressed: () {},
+                        onButtonPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage()));
+                        },
                       ),
                       const SizedBox(height: 5),
                       CustomSettingsButton(
@@ -103,10 +107,31 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.logout, size: 30),
                         settingsText: 'Logout',
                         backgroundColor: const Color.fromARGB(255, 255, 53, 100),
-                        onButtonPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const LoginScreen())
+                        onButtonPressed: () async {
+                          await showDialog(
+                            context: context, 
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Logout?'),
+                                content: const Text('Are you sure you wish to logout?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () { Navigator.pop(context); },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LoginScreen())
+                                      );
+                                    },
+                                    child: const Text('Confirm'),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                       ),
@@ -115,7 +140,7 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.close, size: 30),
                         settingsText: 'Close Application',
                         backgroundColor: const Color.fromARGB(255, 204, 11, 56),
-                        onButtonPressed: () { /*SystemNavigator.pop();*/ },
+                        onButtonPressed: () { /*SystemNavigator.pop(animated: true);*/ },
                       ),
                     ],
                   ),

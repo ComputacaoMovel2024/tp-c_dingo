@@ -53,4 +53,8 @@ class SharedPreferencesManager {
   Future<void> setBool(String key, bool value) async {
     await _prefs?.setBool(key, value);
   }
+
+  Future<void> removeKey(String key) async {
+    await _prefs?.remove(key);
+  }
 }
