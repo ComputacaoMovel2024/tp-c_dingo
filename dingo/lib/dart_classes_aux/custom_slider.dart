@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:dingo/dart_classes_aux/shared_preferences_manager.dart';
 
 class CustomSlider extends StatefulWidget {
   final String customIconPath;
@@ -17,6 +18,7 @@ class CustomSlider extends StatefulWidget {
 
 class _CustomSliderState extends State<CustomSlider> {
   double _sliderCurrentValue = 50; //Valor default
+  final SharedPreferencesManager _prefsManager = SharedPreferencesManager();
 
   @override
   void initState() {
@@ -26,16 +28,15 @@ class _CustomSliderState extends State<CustomSlider> {
 
   //Carregar os valores armazenados nas Shared Preferences
   Future<void> _loadSliderValue() async {
-    final prefs = await SharedPreferences.getInstance();
+    await _prefsManager.init(); // Verificar que as SharedPreferences estão inicializadas
     setState(() {
-      _sliderCurrentValue = prefs.getDouble(widget.preferenceKey) ?? 50;
+      _sliderCurrentValue = _prefsManager.getDouble(widget.preferenceKey, 50);
     });
   }
 
-  //Salvar os valores nas Shared Preferences
+  //Salvar os valores dos sliders nas SharedPreferences
   Future<void> _saveSliderValue(double value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(widget.preferenceKey, value);
+    await _prefsManager.setDouble(widget.preferenceKey, value);
   }
 
   @override

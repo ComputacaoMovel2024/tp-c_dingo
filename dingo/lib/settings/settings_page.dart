@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:dingo/dart_classes_aux/custom_slider.dart';
-import 'package:flutter/services.dart';
 import '../main_menu/login_screen.dart';
+
+import 'profile_page.dart';
 
 import 'dart:ui' as ui;
 
@@ -59,7 +60,9 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.person, size: 30),
                         settingsText: 'Edit Profile',
                         backgroundColor: const Color.fromARGB(255, 202, 231, 255),
-                        onButtonPressed: () {},
+                        onButtonPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+                        },
                       ),
                       const SizedBox(height: 5),
                       CustomSettingsButton(

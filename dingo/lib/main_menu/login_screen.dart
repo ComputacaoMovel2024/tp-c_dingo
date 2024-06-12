@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         placeholderText: 'Username',
                         isObscure: false,
                         customPrefixIcon: const Icon(Icons.person),
-                        controller: _usernameController, // Pass the controller here
+                        controller: _usernameController,
                       ),
                       const SizedBox(height: 20),
                       const Text('Introduce your password', style: TextStyle(fontSize: 20)),
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         placeholderText: 'Password',
                         isObscure: true,
                         customPrefixIcon: const Icon(Icons.key),
-                        controller: _passwordController, // Pass the controller here
+                        controller: _passwordController,
                       ),
                       const SizedBox(height: 5),
                       Center(

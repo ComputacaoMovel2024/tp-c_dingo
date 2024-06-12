@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'dart:async';
 import 'login_screen.dart';
-
 import 'dart:ui' as ui;
 
 class SplashScreen extends StatefulWidget {
@@ -13,19 +11,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
 
     //Timer para se conseguir observar o Splash Screen
     //Poderá ser trocado mais tarde
-    Timer(
+    _timer = Timer(
       const Duration(seconds: 20),
       () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _skipSplashScreen() {
+    _timer?.cancel();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
       ),
     );
   }
@@ -45,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container( 
+                Container(
                   width: 200,
                   height: 75,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -65,10 +81,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
                 const SizedBox(height: 50),
-                 Image.asset(
-                    'lib/assets/dingo.png',
-                    height: 200,
-                    width: 200,
+                Image.asset(
+                  'lib/assets/dingo.png',
+                  height: 200,
+                  width: 200,
                 ),
                 const SizedBox(height: 25),
                 const SizedBox(
@@ -81,11 +97,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 50),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
-                  },
+                  onPressed: _skipSplashScreen,
                   child: const Text('Skip'), //Para debugging e para não esperar os 20 segundos
                 ),
                 Container(
@@ -114,4 +126,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-} 
+}
