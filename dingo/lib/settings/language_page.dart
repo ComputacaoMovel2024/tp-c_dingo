@@ -42,6 +42,7 @@ class _LanguagePageState extends State<LanguagePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             width: 150,
@@ -53,9 +54,49 @@ class _LanguagePageState extends State<LanguagePage> {
                                 elevation: 5,
                                 backgroundColor: Colors.white,
                                 shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero),
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                ),
                               ),
-                              child: const Text('Teste'),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'lib/assets/portugal_flag.png',
+                                    width: 75,
+                                    height: 50,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text('Português', style: TextStyle(fontSize: 20, color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Container(
+                            width: 150,
+                            height: 150,
+                            margin: const EdgeInsets.all(5),
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                elevation: 5,
+                                backgroundColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'lib/assets/usa_flag.png',
+                                    width: 75,
+                                    height: 50,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text('English', style: TextStyle(fontSize: 20, color: Colors.black)),
+                                ],
+                              ),
                             ),
                           ),
                         ],

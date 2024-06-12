@@ -28,7 +28,7 @@ class _CustomSliderState extends State<CustomSlider> {
 
   //Carregar os valores armazenados nas Shared Preferences
   Future<void> _loadSliderValue() async {
-    await _prefsManager.init(); // Verificar que as SharedPreferences estão inicializadas
+    await _prefsManager.init(); //Verificar que as SharedPreferences estão inicializadas
     setState(() {
       _sliderCurrentValue = _prefsManager.getDouble(widget.preferenceKey, 50);
     });

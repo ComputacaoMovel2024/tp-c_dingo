@@ -18,13 +18,15 @@ class _NameTextFieldState extends State<NameTextField> {
   bool _isBeingEdited = false;
   final SharedPreferencesManager _prefsManager = SharedPreferencesManager();
 
+  //Carregar os valores armazenados nas Shared Preferences
   Future<void> _loadUsernameValue() async {
-    await _prefsManager.init();
+    await _prefsManager.init(); //Verificar que as SharedPreferences estão inicializadas
     setState(() {
       _controller.text = _prefsManager.getString(widget.preferenceKey, '');
     });
   }
 
+  //Salvar os valores do Username nas SharedPreferences
   Future<void> _saveUsernameValue(String value) async {
     await _prefsManager.setString(widget.preferenceKey, value);
   }
