@@ -6,6 +6,9 @@ import '../main_menu/login_screen.dart';
 
 import 'profile_page.dart';
 import 'language_page.dart';
+import 'privacy_page.dart';
+import 'support_page.dart';
+import 'credits_page.dart';
 
 import 'dart:ui' as ui;
 
@@ -80,21 +83,27 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.lock, size: 30),
                         settingsText: 'Privacy Settings',
                         backgroundColor: const Color.fromARGB(255, 202, 231, 255),
-                        onButtonPressed: () {},
+                        onButtonPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacyPage()));
+                        },
                       ),
                       const SizedBox(height: 5),
                       CustomSettingsButton(
                         settingsIcon: const Icon(Icons.headset_mic, size: 30),
                         settingsText: 'Help & Support',
                         backgroundColor: const Color.fromARGB(255, 202, 231, 255),
-                        onButtonPressed: () {},
+                        onButtonPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SupportPage()));
+                        },
                       ),
                       const SizedBox(height: 5),
                       CustomSettingsButton(
                         settingsIcon: const Icon(Icons.info, size: 30),
                         settingsText: 'Info & Credits',
                         backgroundColor: const Color.fromARGB(255, 202, 231, 255),
-                        onButtonPressed: () {},
+                        onButtonPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const CreditsPage()));
+                        },
                       ),
                       const SizedBox(height: 5),
                       const Divider(
@@ -140,7 +149,33 @@ class SettingsPage extends StatelessWidget {
                         settingsIcon: const Icon(Icons.close, size: 30),
                         settingsText: 'Close Application',
                         backgroundColor: const Color.fromARGB(255, 204, 11, 56),
-                        onButtonPressed: () { /*SystemNavigator.pop(animated: true);*/ },
+                        onButtonPressed: () async {
+                          await showDialog(
+                            context: context, 
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Exit?'),
+                                content: const Text('Are you sure you wish to exit the application?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () { Navigator.pop(context); },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LoginScreen())
+                                      );
+                                    },
+                                    child: const Text('Confirm'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

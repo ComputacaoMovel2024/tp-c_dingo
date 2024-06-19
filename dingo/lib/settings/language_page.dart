@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:dingo/dart_classes_aux/custom_language_button.dart';
+import 'package:dingo/dart_classes_aux/shared_preferences_manager.dart';
+
 import 'dart:ui' as ui;
 
 class LanguagePage extends StatefulWidget {
@@ -10,6 +13,36 @@ class LanguagePage extends StatefulWidget {
 }
 
 class _LanguagePageState extends State<LanguagePage> {
+  final SharedPreferencesManager _prefsManager = SharedPreferencesManager();
+  String _selectedLanguageKey = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLanguage();
+  }
+
+  //Carregar os valores armazenados nas Shared Preferences
+  Future<void> _loadSelectedLanguage() async {
+    await _prefsManager.init(); //Verificar que as SharedPreferences estão inicializadas
+    setState(() {
+      _selectedLanguageKey = _prefsManager.getString('selected_language', '');
+    });
+  }
+
+  //Salvar os valores do Username nas SharedPreferences
+  Future<void> _saveSelectedLanguage(String preferenceKey) async {
+    await _prefsManager.setString('selected_language', preferenceKey);
+  }
+
+  //Quando uma das linguagens é selecionada
+  void _onLanguageSelected(String preferenceKey) {
+    setState(() {
+      _selectedLanguageKey = preferenceKey;
+    });
+    _saveSelectedLanguage(preferenceKey);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,74 +74,28 @@ class _LanguagePageState extends State<LanguagePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: 150,
-                            height: 150,
-                            margin: const EdgeInsets.all(5),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                elevation: 5,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'lib/assets/portugal_flag.png',
-                                    width: 75,
-                                    height: 50,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  const Text('Português', style: TextStyle(fontSize: 20, color: Colors.black)),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Container(
-                            width: 150,
-                            height: 150,
-                            margin: const EdgeInsets.all(5),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                elevation: 5,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'lib/assets/usa_flag.png',
-                                    width: 75,
-                                    height: 50,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  const Text('English', style: TextStyle(fontSize: 20, color: Colors.black)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                      CustomLanguageButton(
+                        languageIcon: 'lib/assets/portugal_flag.png',
+                        languageText: 'Português',
+                        preferenceKey: 'portuguese',
+                        isSelected: _selectedLanguageKey == 'portuguese',
+                        onSelected: () => _onLanguageSelected('portuguese'),
+                      ),
+                      CustomLanguageButton(
+                        languageIcon: 'lib/assets/usa_flag.png',
+                        languageText: 'English',
+                        preferenceKey: 'english',
+                        isSelected: _selectedLanguageKey == 'english',
+                        onSelected: () => _onLanguageSelected('english'),
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
-          )
+          ),
         ],
-      )
+      ),
     );
   }
 }
