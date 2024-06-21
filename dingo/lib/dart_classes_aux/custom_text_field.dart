@@ -5,6 +5,8 @@ class CustomTextField extends StatefulWidget {
   final bool isObscure;
   final Icon customPrefixIcon;
   final TextEditingController controller;
+  final String preferenceKey;
+  final FormFieldValidator<String>? validator;
 
   const CustomTextField({
     super.key,
@@ -12,6 +14,8 @@ class CustomTextField extends StatefulWidget {
     required this.isObscure,
     required this.customPrefixIcon,
     required this.controller,
+    required this.preferenceKey,
+    this.validator,
   });
 
   @override
@@ -31,10 +35,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 250,
-      child: TextField(
+      child: TextFormField(
         controller: _controller,
         autocorrect: false,
         obscureText: widget.isObscure,
+        validator: widget.validator,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dingo/dart_classes_aux/name_text_field.dart';
+import '../main_menu/login_screen.dart';
 
 import 'dart:ui' as ui;
 
@@ -100,7 +101,35 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 60,
                         margin: const EdgeInsets.all(5),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await showDialog(
+                              context: context, 
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Delete Account?'),
+                                  content: const Text(
+                                    'Are you sure you wish to delete your account? This action is irreversible!'
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () { Navigator.pop(context); },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const LoginScreen())
+                                        );
+                                      },
+                                      child: const Text('Confirm'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             elevation: 5,
                             backgroundColor: const Color.fromARGB(255, 202, 231, 255),

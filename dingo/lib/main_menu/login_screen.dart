@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dingo/dart_classes_aux/custom_text_field.dart';
-
 import 'password_recovery_screen.dart';
 import 'main_screen_placeholder.dart';
-
 import 'dart:ui' as ui;
 
 class LoginScreen extends StatefulWidget {
@@ -14,14 +12,20 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late TextEditingController _usernameController;
-  late TextEditingController _passwordController;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final Map<String, String> loginCredentials = {
+    'U202200215': '202200215',
+    'U202200213': '202200213',
+    'U202200196': '202200196',
+    'U202200184': '202200184',
+    'U202002019': '202002019',
+  };
 
   @override
   void initState() {
     super.initState();
-    _usernameController = TextEditingController();
-    _passwordController = TextEditingController();
   }
 
   @override
@@ -32,12 +36,56 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onLoginTap(BuildContext context) {
-    _usernameController.clear();
-    _passwordController.clear();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
-    );
+    if (_usernameController.text.isEmpty && _passwordController.text.isEmpty) {
+      showDialog(
+        context: context, 
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Login Failed'),
+            content: const Text('Username and password fields are empty.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        }
+      );
+    }
+
+    String enteredUsername = _usernameController.text;
+    String enteredPassword = _passwordController.text;
+
+    if (loginCredentials.containsKey(enteredUsername)) {
+      if (loginCredentials[enteredUsername] == enteredPassword) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
+        );
+      }
+      else {
+        showDialog(
+          context: context, 
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Login Failed'),
+              content: const Text('The inserted password is incorrect or empty.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          }
+        );
+      }
+    } 
   }
 
   @override
@@ -68,106 +116,142 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Expanded(
                 child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Text(
-                        'Welcome to Dingo!',
-                        style: TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: 36,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Text(
-                        'Your friendly computer!',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Image.asset(
-                        'lib/assets/dingo.png',
-                        height: 125,
-                        width: 125,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Introduce your username', style: TextStyle(fontSize: 20)),
-                      const SizedBox(height: 5),
-                      CustomTextField(
-                        placeholderText: 'Username',
-                        isObscure: false,
-                        customPrefixIcon: const Icon(Icons.person),
-                        controller: _usernameController,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Introduce your password', style: TextStyle(fontSize: 20)),
-                      const SizedBox(height: 5),
-                      CustomTextField(
-                        placeholderText: 'Password',
-                        isObscure: true,
-                        customPrefixIcon: const Icon(Icons.key),
-                        controller: _passwordController,
-                      ),
-                      const SizedBox(height: 5),
-                      Center(
-                        child: Container(
-                          width: 200,
-                          height: 60,
-                          margin: const EdgeInsets.all(5),
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              onLoginTap(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              elevation: 5,
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero),
-                            ),
-                            icon: Image.asset('lib/assets/google_icon.png'),
-                            label: const Text(
-                              'Login with Google',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          onLoginTap(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 5,
-                          backgroundColor: const Color.fromARGB(254, 66, 254, 157),
-                          padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
-                        ),
-                        child: const Text('Login'),
-                      ),
-                      const SizedBox(height: 5),
-                      GestureDetector(
-                        onTap: () {
-                          _usernameController.clear();
-                          _passwordController.clear();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const PasswordRecoveryPage()),
-                          );
-                        },
-                        child: const Text(
-                          'Forgot your password?',
+                  child: Form(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const Text(
+                          'Welcome to Dingo!',
                           style: TextStyle(
-                            fontSize: 12,
-                            decoration: TextDecoration.underline,
-                            color: Color.fromARGB(255, 0, 33, 60),
+                            fontFamily: 'Roboto',
+                            fontSize: 36,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ),
-                    ],
+                        const Text(
+                          'Your friendly computer!',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Image.asset(
+                          'lib/assets/dingo.png',
+                          height: 125,
+                          width: 125,
+                        ),
+                        const SizedBox(height: 15),
+                        const Text('Introduce your username', style: TextStyle(fontSize: 20)),
+                        const SizedBox(height: 5),
+                        CustomTextField(
+                          placeholderText: 'Username',
+                          isObscure: false,
+                          customPrefixIcon: const Icon(Icons.person),
+                          controller: _usernameController,
+                          preferenceKey: 'login_username',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        const Text('Introduce your password', style: TextStyle(fontSize: 20)),
+                        const SizedBox(height: 5),
+                        CustomTextField(
+                          placeholderText: 'Password',
+                          isObscure: true,
+                          customPrefixIcon: const Icon(Icons.key),
+                          controller: _passwordController,
+                          preferenceKey: 'login_password',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 5),
+                        Center(
+                          child: Container(
+                            width: 200,
+                            height: 60,
+                            margin: const EdgeInsets.all(5),
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                onLoginTap(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 5,
+                                backgroundColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero
+                                ),
+                              ),
+                              icon: Image.asset('lib/assets/google_icon.png'),
+                              label: const Text(
+                                'Login with Google',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        ElevatedButton(
+                          onPressed: () {
+                            onLoginTap(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 5,
+                            backgroundColor: const Color.fromARGB(254, 66, 254, 157),
+                            padding: const EdgeInsets.fromLTRB(45, 5, 45, 5),
+                          ),
+                          child: const Text('Login'),
+                        ),
+                        const SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: () {
+                            _usernameController.clear();
+                            _passwordController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const PasswordRecoveryPage()),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot your password?',
+                            style: TextStyle(
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                              color: Color.fromARGB(255, 0, 33, 60),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: () {
+                            _usernameController.clear();
+                            _passwordController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
+                            );
+                          },
+                          child: const Text(
+                            'Login as guest',
+                            style: TextStyle(
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                              color: Color.fromARGB(255, 0, 33, 60),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

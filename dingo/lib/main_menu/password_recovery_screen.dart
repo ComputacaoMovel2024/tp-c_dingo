@@ -77,7 +77,14 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                         placeholderText: 'Email',
                         isObscure: false,
                         customPrefixIcon: const Icon(Icons.email),
-                        controller: _emailController, // Pass the controller here
+                        controller: _emailController,
+                        preferenceKey: 'email_forgot_password',
+                        validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            return null;
+                          },
                       ),
                       const SizedBox(height: 25),
                       ElevatedButton(
