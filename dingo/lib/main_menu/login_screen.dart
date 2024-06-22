@@ -61,6 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (loginCredentials.containsKey(enteredUsername)) {
       if (loginCredentials[enteredUsername] == enteredPassword) {
+        _usernameController.clear();
+        _passwordController.clear();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MainScreenPlaceholder()),
