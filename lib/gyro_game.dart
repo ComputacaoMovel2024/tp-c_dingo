@@ -9,8 +9,16 @@ class GyroGame extends StatelessWidget {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
     ]);
   }
+
+  /*@override
+  void initState()
+  {
+    SystemChrome.setPreferredOrientations(const [DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight]);
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +30,18 @@ class GyroGame extends StatelessWidget {
             image: AssetImage("assets/images/background_games.png"),
             fit: BoxFit.cover,
           ),
+        ),
+        child: Row(
+          verticalDirection: VerticalDirection.down,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/avatar.png")
+                )
+              ),
+            )
+          ],
         ),
       ),
     );
