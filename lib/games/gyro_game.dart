@@ -18,27 +18,35 @@ class _GameScreenState extends State<GameScreen> {
   int _score = 0;
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
-    Permission.sensors.request();
-    if (await Permission.sensors.request().isGranted) {
-    gyroscopeEvents.listen((GyroscopeEvent event) {
-      setState(() {
-        _playerPosition -= event.y * 10;
-        if (_playerPosition < 0) _playerPosition = 0;
-        if (_playerPosition > _deviceWidth - 50) _playerPosition = _deviceWidth - 50;
-        print("Gyroscope Event: ${event.y}, Player Position: $_playerPosition");
-      });
-    });
-    }
+    _initializeGame();
+  }
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (!_isGameOver) {
+  Future<void> _initializeGame() async {
+    // Solicitar permissão para usar os sensores
+    //if (await Permission.sensors.request().isGranted) {
+      // Iniciar escuta dos eventos do giroscópio
+      /*gyroscopeEvents.listen((GyroscopeEvent event) {
         setState(() {
-          _fallingObjects.add(_createFallingObject());
+          _playerPosition -= event.y * 10;
+          if (_playerPosition < 0) _playerPosition = 0;
+          if (_playerPosition > _deviceWidth - 50) _playerPosition = _deviceWidth - 50;
+          print("Gyroscope Event: ${event.y}, Player Position: $_playerPosition");
         });
-      }
-    });
+      });*/
+
+      // Iniciar timer para criar objetos que caem
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (!_isGameOver) {
+          setState(() {
+            _fallingObjects.add(_createFallingObject());
+          });
+        }
+      });
+    //} else {
+      //print('Permissão para usar sensores não foi concedida');
+    //}
   }
 
   @override
@@ -48,7 +56,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _createFallingObject() {
-    double startX = Random().nextDouble() * _deviceWidth;
+    double startX = Random().nextDouble() * _deviceWidth; //não funciona, não sei porquê
     bool isCoin = Random().nextBool();
     print("Creating ${isCoin ? 'coin' : 'enemy'} at $startX");
     return Positioned(
@@ -102,6 +110,14 @@ class _GameScreenState extends State<GameScreen> {
                 style: TextStyle(fontSize: 30, color: Colors.red),
               ),
             ),
+            Container(
+              alignment: Alignment.topRight,
+              margin: EdgeInsets.all(10.0),
+              child: Text(
+                "Score: $_score",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            )
         ],
       ),
     );
@@ -147,8 +163,10 @@ class _FallingObjectState extends State<FallingObject> {
     return Positioned(
       top: _positionY,
       child: widget.isCoin
-          ? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
-          : Icon(Icons.warning, size: 30, color: Colors.red),
+          ? Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/coin.png"))),)
+          : Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/virus.png"))),),
+          /*? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
+          : Icon(Icons.warning, size: 30, color: Colors.red),*/
     );
   }
 }
