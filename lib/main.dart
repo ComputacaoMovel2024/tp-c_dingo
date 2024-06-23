@@ -1,3 +1,4 @@
+import 'package:dingo/api/firebase_api.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'workshop.dart';
@@ -13,6 +14,7 @@ void main() async {
   await Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
 );
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
