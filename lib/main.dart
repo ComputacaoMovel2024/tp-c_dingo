@@ -3,8 +3,16 @@ import 'home.dart';
 import 'workshop.dart';
 import 'games.dart';
 import 'closet.dart';
+import 'map.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 
@@ -20,6 +28,7 @@ class _MyAppState extends State<MyApp> {
 
   final List<Widget> _pages = [
     Home(),
+    Map(),
     Workshop(),
     Games(),
     Closet(),
@@ -47,6 +56,10 @@ class _MyAppState extends State<MyApp> {
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Map',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.precision_manufacturing),

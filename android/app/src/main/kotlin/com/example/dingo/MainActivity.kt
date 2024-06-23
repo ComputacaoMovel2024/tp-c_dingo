@@ -1,4 +1,4 @@
-package com.example.dingo
+package pt.ips.lei_cm.dingo
 
 import io.flutter.embedding.android.FlutterActivity
 
