@@ -1,8 +1,30 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
+      .then((_) {
+    runApp(MyApp());
+  });
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Game',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: GameScreen(),
+    );
+  }
+}
 
 class GameScreen extends StatefulWidget {
   @override
@@ -49,6 +71,20 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
+  void _restartGame() {
+    setState(() {
+      _playerPosition = 0;
+      _fallingObjects.clear();
+      _isGameOver = false;
+      _score = 0;
+      _initializeGame();
+    });
+  }
+
+  void _exitGame() {
+    SystemNavigator.pop();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -59,23 +95,20 @@ class _GameScreenState extends State<GameScreen> {
     double startX = Random().nextDouble() * _deviceWidth;
     bool isCoin = Random().nextBool();
     print("Creating ${isCoin ? 'coin' : 'enemy'} at $startX");
-    return Positioned(
-      top: 0,
-      left: startX,
-      child: FallingObject(
-        isCoin: isCoin,
-        onCollision: (isCoin) {
-          if (isCoin) {
-            setState(() {
-              _score += 1;
-            });
-          } else {
-            setState(() {
-              _isGameOver = true;
-            });
-          }
-        },
-      ),
+    return FallingObject(
+      startX: startX,
+      isCoin: isCoin,
+      onCollision: (isCoin) {
+        if (isCoin) {
+          setState(() {
+            _score += 1;
+          });
+        } else {
+          setState(() {
+            _isGameOver = true;
+          });
+        }
+      },
     );
   }
 
@@ -104,10 +137,25 @@ class _GameScreenState extends State<GameScreen> {
           ..._fallingObjects,
           if (_isGameOver)
             Center(
-              child: Text(
-                'Game Over\nScore: $_score',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30, color: Colors.red),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Game Over\nScore: $_score',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 30, color: Colors.red),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _restartGame,
+                    child: Text('Jogar Novamente'),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _exitGame,
+                    child: Text('Sair do Jogo'),
+                  ),
+                ],
               ),
             ),
         ],
@@ -117,10 +165,11 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 class FallingObject extends StatefulWidget {
+  final double startX;
   final bool isCoin;
   final Function(bool) onCollision;
 
-  FallingObject({required this.isCoin, required this.onCollision});
+  FallingObject({required this.startX, required this.isCoin, required this.onCollision});
 
   @override
   _FallingObjectState createState() => _FallingObjectState();
@@ -137,7 +186,8 @@ class _FallingObjectState extends State<FallingObject> {
       setState(() {
         _positionY += 5;
       });
-      if (_positionY > MediaQuery.of(context).size.height) {
+      if (_positionY > MediaQuery.of(context).size.height - 50 && 
+          widget.startX >= _positionY && widget.startX <= _positionY + 50) {
         widget.onCollision(widget.isCoin);
         _timer.cancel();
       }
@@ -154,6 +204,7 @@ class _FallingObjectState extends State<FallingObject> {
   Widget build(BuildContext context) {
     return Positioned(
       top: _positionY,
+      left: widget.startX,
       child: widget.isCoin
           ? Image.asset('assets/images/coin.png', width: 30, height: 30)
           : Image.asset('assets/images/virus.png', width: 30, height: 30),
