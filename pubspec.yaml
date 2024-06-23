@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   google_maps_flutter: ^2.1.1
   permission_handler: ^10.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -23,12 +24,6 @@ flutter:
   uses-material-design: true
   
   assets:
-    - assets/images/background_home.png
-    - assets/images/background_workshop.png
-    - assets/images/background_games.png
-    - assets/images/background_closet.png
-    - assets/images/background_image.png
-    - assets/images/avatar.png
-    - assets/images/money_icon.png
+    - assets/images/
 
 

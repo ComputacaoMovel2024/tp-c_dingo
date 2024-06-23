@@ -1,3 +1,4 @@
+import 'package:dingo/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -48,7 +49,17 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ],
                   ),
-                  const Icon(Icons.settings, color: Colors.white),
+                  IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
