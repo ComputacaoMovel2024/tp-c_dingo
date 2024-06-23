@@ -25,16 +25,16 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _initializeGame() async {
     // Solicitar permissão para usar os sensores
-    //if (await Permission.sensors.request().isGranted) {
+    if (await Permission.sensors.request().isGranted) {
       // Iniciar escuta dos eventos do giroscópio
-      /*gyroscopeEvents.listen((GyroscopeEvent event) {
+      gyroscopeEvents.listen((GyroscopeEvent event) {
         setState(() {
           _playerPosition -= event.y * 10;
           if (_playerPosition < 0) _playerPosition = 0;
           if (_playerPosition > _deviceWidth - 50) _playerPosition = _deviceWidth - 50;
           print("Gyroscope Event: ${event.y}, Player Position: $_playerPosition");
         });
-      });*/
+      });
 
       // Iniciar timer para criar objetos que caem
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -44,9 +44,9 @@ class _GameScreenState extends State<GameScreen> {
           });
         }
       });
-    //} else {
-      //print('Permissão para usar sensores não foi concedida');
-    //}
+    } else {
+      print('Permissão para usar sensores não foi concedida');
+    }
   }
 
   @override
@@ -56,7 +56,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _createFallingObject() {
-    double startX = Random().nextDouble() * _deviceWidth; //não funciona, não sei porquê
+    double startX = Random().nextDouble() * _deviceWidth;
     bool isCoin = Random().nextBool();
     print("Creating ${isCoin ? 'coin' : 'enemy'} at $startX");
     return Positioned(
@@ -95,10 +95,10 @@ class _GameScreenState extends State<GameScreen> {
           Positioned(
             bottom: 20,
             left: _playerPosition,
-            child: Container(
+            child: Image.asset(
+              'assets/images/avatar.png',
               width: 50,
               height: 50,
-              color: Colors.blue,
             ),
           ),
           ..._fallingObjects,
@@ -110,14 +110,6 @@ class _GameScreenState extends State<GameScreen> {
                 style: TextStyle(fontSize: 30, color: Colors.red),
               ),
             ),
-            Container(
-              alignment: Alignment.topRight,
-              margin: EdgeInsets.all(10.0),
-              child: Text(
-                "Score: $_score",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-            )
         ],
       ),
     );
@@ -163,12 +155,8 @@ class _FallingObjectState extends State<FallingObject> {
     return Positioned(
       top: _positionY,
       child: widget.isCoin
-          /*? Container(decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("../assets/images/coin.png"))),)
-          : Container(decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("../assets/images/virus.png"))),),*/
-          /*? Image.asset('../assets/images/coin.png', width: 30, height: 30)
-          : Image.asset('../assets/images/virus.png', width: 30, height: 30),*/
-          ? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
-          : Icon(Icons.warning, size: 30, color: Colors.red),
+          ? Image.asset('assets/images/coin.png', width: 30, height: 30)
+          : Image.asset('assets/images/virus.png', width: 30, height: 30),
     );
   }
 }
