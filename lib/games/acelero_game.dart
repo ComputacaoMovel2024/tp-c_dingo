@@ -4,23 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shake Game',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ShakeGame(),
-    );
-  }
-}
-
 class ShakeGame extends StatefulWidget {
   @override
   _ShakeGameState createState() => _ShakeGameState();
@@ -60,6 +43,7 @@ class _ShakeGameState extends State<ShakeGame> {
       _lastShakeTime = DateTime.fromMillisecondsSinceEpoch(
           _prefs.getInt('lastShakeTime') ?? DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch);
       _coins = _prefs.getInt('coins') ?? 0;
+      _canShake = DateTime.now().difference(_lastShakeTime).inHours >= 24;
     });
   }
 
@@ -73,7 +57,6 @@ class _ShakeGameState extends State<ShakeGame> {
           _lastShakeTime = now;
           _coins += 10; // Ganhar 10 moedas
           _canShake = false;
-          print("################################GANHASTE!!!!");
         });
         _prefs.setInt('lastShakeTime', now.millisecondsSinceEpoch);
         _prefs.setInt('coins', _coins);
@@ -85,15 +68,18 @@ class _ShakeGameState extends State<ShakeGame> {
   }
 
   void _showCoins() {
-    // Mostrar as moedas na tela
-    // Pode usar animação para adicionar um efeito visual
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Você ganhou 10 moedas!'),
+      ),
+    );
   }
 
   void _showTimeRemaining() {
-    int hoursRemaining = 24 - DateTime.now().difference(_lastShakeTime).inHours;
+    Duration timeRemaining = Duration(hours: 24) - DateTime.now().difference(_lastShakeTime);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Você deve esperar $hoursRemaining horas antes de jogar novamente.'),
+        content: Text('Faltam ${timeRemaining.inHours} horas, ${timeRemaining.inMinutes % 60} minutos e ${timeRemaining.inSeconds % 60} segundos até poderes agitar novamente!'),
       ),
     );
   }
@@ -104,7 +90,7 @@ class _ShakeGameState extends State<ShakeGame> {
       body: Stack(
         children: [
           Image.asset(
-            'assets/images/background.png',
+            'assets/images/background_image.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -114,14 +100,32 @@ class _ShakeGameState extends State<ShakeGame> {
             },
           ),
           Center(
-            child: Image.asset(
-              'assets/images/avatar.png',
-              width: 200,
-              height: 200,
-              errorBuilder: (context, error, stackTrace) {
-                print('Erro ao carregar a imagem do personagem: $error');
-                return Center(child: Text('Erro ao carregar a imagem do personagem'));
-              },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/avatar.png',
+                  width: 200,
+                  height: 200,
+                  errorBuilder: (context, error, stackTrace) {
+                    print('Erro ao carregar a imagem do personagem: $error');
+                    return Center(child: Text('Erro ao carregar a imagem do personagem'));
+                  },
+                ),
+                SizedBox(height: 20),
+                _canShake
+                    ? Text(
+                        'Agita-me!',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      )
+                    : Text(
+                        /*'Faltam ${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inHours} horas, '
+                        '${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inMinutes % 60} minutos e '
+                        '${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inSeconds % 60} segundos até poderes agitar novamente!',*/
+                        'Alô',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
+              ],
             ),
           ),
         ],

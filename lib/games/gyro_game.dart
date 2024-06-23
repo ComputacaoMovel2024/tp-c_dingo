@@ -5,33 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
-      .then((_) {
-    runApp(MyApp());
-  });
-}
-
-class MyApp extends StatelessWidget {
+class GyroGameScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Game',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: GameScreen(),
-    );
-  }
+  _GyroGameScreenState createState() => _GyroGameScreenState();
 }
 
-class GameScreen extends StatefulWidget {
-  @override
-  _GameScreenState createState() => _GameScreenState();
-}
-
-class _GameScreenState extends State<GameScreen> {
+class _GyroGameScreenState extends State<GyroGameScreen> {
   double _playerPosition = 0;
   double _deviceWidth = 0;
   List<Widget> _fallingObjects = [];
@@ -46,19 +25,16 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _initializeGame() async {
-    // Solicitar permissão para usar os sensores
     if (await Permission.sensors.request().isGranted) {
-      // Iniciar escuta dos eventos do giroscópio
       gyroscopeEvents.listen((GyroscopeEvent event) {
         setState(() {
-          _playerPosition -= event.y * 10;
+          _playerPosition -= event.z * 10;
           if (_playerPosition < 0) _playerPosition = 0;
           if (_playerPosition > _deviceWidth - 50) _playerPosition = _deviceWidth - 50;
-          print("Gyroscope Event: ${event.y}, Player Position: $_playerPosition");
+          print("Gyroscope Event: ${event.z}, Player Position: $_playerPosition");
         });
       });
 
-      // Iniciar timer para criar objetos que caem
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (!_isGameOver) {
           setState(() {
@@ -72,13 +48,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _restartGame() {
-    setState(() {
-      _playerPosition = 0;
-      _fallingObjects.clear();
-      _isGameOver = false;
-      _score = 0;
-      _initializeGame();
-    });
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   void _exitGame() {
@@ -186,7 +156,7 @@ class _FallingObjectState extends State<FallingObject> {
       setState(() {
         _positionY += 5;
       });
-      if (_positionY > MediaQuery.of(context).size.height - 50 && 
+      if (_positionY > MediaQuery.of(context).size.height - 50 &&
           widget.startX >= _positionY && widget.startX <= _positionY + 50) {
         widget.onCollision(widget.isCoin);
         _timer.cancel();
