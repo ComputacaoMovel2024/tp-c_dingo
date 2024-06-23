@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dingo/main.dart';
 import 'package:flutter/material.dart';
-import 'header.dart';
+import '../header.dart';
 
 class Games extends StatelessWidget {
   Games({super.key});
