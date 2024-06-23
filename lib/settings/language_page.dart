@@ -75,7 +75,7 @@ class _LanguagePageState extends State<LanguagePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       CustomLanguageButton(
-                        languageIcon: '/assets/images/portugal_flag.png',
+                        languageIcon: 'assets/images/portugal_flag.png',
                         languageText: 'Português',
                         preferenceKey: 'portuguese',
                         isSelected: _selectedLanguageKey == 'portuguese',
