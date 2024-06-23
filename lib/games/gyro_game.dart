@@ -163,10 +163,12 @@ class _FallingObjectState extends State<FallingObject> {
     return Positioned(
       top: _positionY,
       child: widget.isCoin
-          ? Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/coin.png"))),)
-          : Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/virus.png"))),),
-          /*? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
-          : Icon(Icons.warning, size: 30, color: Colors.red),*/
+          /*? Container(decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("../assets/images/coin.png"))),)
+          : Container(decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("../assets/images/virus.png"))),),*/
+          /*? Image.asset('../assets/images/coin.png', width: 30, height: 30)
+          : Image.asset('../assets/images/virus.png', width: 30, height: 30),*/
+          ? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
+          : Icon(Icons.warning, size: 30, color: Colors.red),
     );
   }
 }
