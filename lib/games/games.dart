@@ -18,15 +18,19 @@ class Games extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(child: CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: false,
-            aspectRatio: 2.0,
-            enlargeCenterPage: true,
-            enlargeStrategy: CenterPageEnlargeStrategy.height,
+        child: Center(
+          child: Stack(
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                autoPlay: false,
+                aspectRatio: 2.0,
+                enlargeCenterPage: true,
+                enlargeStrategy: CenterPageEnlargeStrategy.height,
           ),
           items: imageSliders,
-        ),
+        ),], // Adicionar botão de play
+        )
         ) 
       ),
     );

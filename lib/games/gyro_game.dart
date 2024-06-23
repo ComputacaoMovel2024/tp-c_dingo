@@ -1,50 +1,154 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../header.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
-class GyroGame extends StatelessWidget {
-  const GyroGame({super.key});
+class GameScreen extends StatefulWidget {
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
 
-  void main() {
-    WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ]);
+class _GameScreenState extends State<GameScreen> {
+  double _playerPosition = 0;
+  double _deviceWidth = 0;
+  List<Widget> _fallingObjects = [];
+  Timer? _timer;
+  bool _isGameOver = false;
+  int _score = 0;
+
+  @override
+  Future<void> initState() async {
+    super.initState();
+    Permission.sensors.request();
+    if (await Permission.sensors.request().isGranted) {
+    gyroscopeEvents.listen((GyroscopeEvent event) {
+      setState(() {
+        _playerPosition -= event.y * 10;
+        if (_playerPosition < 0) _playerPosition = 0;
+        if (_playerPosition > _deviceWidth - 50) _playerPosition = _deviceWidth - 50;
+        print("Gyroscope Event: ${event.y}, Player Position: $_playerPosition");
+      });
+    });
+    }
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (!_isGameOver) {
+        setState(() {
+          _fallingObjects.add(_createFallingObject());
+        });
+      }
+    });
   }
 
   @override
-  void initState()
-  {
-    //SystemChrome.setPreferredOrientations(const [DeviceOrientation.landscapeLeft,
-    //DeviceOrientation.landscapeRight]);
-    
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Widget _createFallingObject() {
+    double startX = Random().nextDouble() * _deviceWidth;
+    bool isCoin = Random().nextBool();
+    print("Creating ${isCoin ? 'coin' : 'enemy'} at $startX");
+    return Positioned(
+      top: 0,
+      left: startX,
+      child: FallingObject(
+        isCoin: isCoin,
+        onCollision: (isCoin) {
+          if (isCoin) {
+            setState(() {
+              _score += 1;
+            });
+          } else {
+            setState(() {
+              _isGameOver = true;
+            });
+          }
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    _deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: const CustomHeader(),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background_games.png"),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/background.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Row(
-          verticalDirection: VerticalDirection.down,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/avatar.png")
-                )
+          Positioned(
+            bottom: 20,
+            left: _playerPosition,
+            child: Container(
+              width: 50,
+              height: 50,
+              color: Colors.blue,
+            ),
+          ),
+          ..._fallingObjects,
+          if (_isGameOver)
+            Center(
+              child: Text(
+                'Game Over\nScore: $_score',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30, color: Colors.red),
               ),
-            )
-          ],
-        ),
+            ),
+        ],
       ),
+    );
+  }
+}
+
+class FallingObject extends StatefulWidget {
+  final bool isCoin;
+  final Function(bool) onCollision;
+
+  FallingObject({required this.isCoin, required this.onCollision});
+
+  @override
+  _FallingObjectState createState() => _FallingObjectState();
+}
+
+class _FallingObjectState extends State<FallingObject> {
+  double _positionY = 0;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      setState(() {
+        _positionY += 5;
+      });
+      if (_positionY > MediaQuery.of(context).size.height) {
+        widget.onCollision(widget.isCoin);
+        _timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: _positionY,
+      child: widget.isCoin
+          ? Icon(Icons.attach_money, size: 30, color: Colors.yellow)
+          : Icon(Icons.warning, size: 30, color: Colors.red),
     );
   }
 }
