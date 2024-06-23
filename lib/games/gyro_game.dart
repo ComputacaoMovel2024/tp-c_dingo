@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'header.dart';
+import '../header.dart';
 
 class GyroGame extends StatelessWidget {
   const GyroGame({super.key});
@@ -13,12 +13,13 @@ class GyroGame extends StatelessWidget {
     ]);
   }
 
-  /*@override
+  @override
   void initState()
   {
-    SystemChrome.setPreferredOrientations(const [DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight]);
-  }*/
+    //SystemChrome.setPreferredOrientations(const [DeviceOrientation.landscapeLeft,
+    //DeviceOrientation.landscapeRight]);
+    
+  }
 
   @override
   Widget build(BuildContext context) {

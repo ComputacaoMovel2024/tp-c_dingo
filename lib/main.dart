@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'workshop.dart';
-import 'games.dart';
+import 'games/games.dart';
 import 'closet.dart';
 
 
