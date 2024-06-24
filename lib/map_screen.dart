@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 
 class MapScreen extends StatefulWidget {
   @override
@@ -15,8 +15,6 @@ class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
   MapType _mapType = MapType.normal;
   Set<Marker> _markers = {};
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref().child('markers');
-  
 
   final LatLng _center = const LatLng(38.5289, -8.8926); // Coordenadas do IPS
 
@@ -33,21 +31,21 @@ class _MapScreenState extends State<MapScreen> {
 
   void _addMarker(LatLng position, String title, String description) {
     final markerId = MarkerId(position.toString());
-    final marker = Marker(
-      markerId: markerId,
-      position: position,
-      infoWindow: InfoWindow(
-        title: title,
-        snippet: description,
-      ),
-      onTap: () => _showMarkerDialog(markerId, title, description),
-    );
-
     setState(() {
-      _markers.add(marker);
-    });
+      _markers.add(
+        Marker(
+            markerId: markerId,
+            position: position,
+            infoWindow: InfoWindow(
+              title: title,
+              snippet: description,
+            ),
+            onTap: () => _showMarkerDialog(markerId, title, description)
+            ),
 
-    _saveMarkerToDatabase(marker);
+      );
+    });
+    _saveMarkers();
   }
 
   Future<void> _showMarkerDialog(MarkerId markerId, String title, String description) async {
@@ -87,49 +85,43 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {
       _markers.removeWhere((marker) => marker.markerId == markerId);
     });
-    _deleteMarkerFromDatabase(markerId);
+    _saveMarkers();
   }
 
-  Future<void> _saveMarkerToDatabase(Marker marker) async {
-    final markerData = {
-      'position': {
-        'lat': marker.position.latitude,
-        'lng': marker.position.longitude,
-      },
+  Future<void> _saveMarkers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String markerList = jsonEncode(_markers.map((marker) => {
+      'position': {'lat': marker.position.latitude, 'lng': marker.position.longitude},
       'title': marker.infoWindow.title,
       'description': marker.infoWindow.snippet,
-    };
-    await _databaseReference.child(marker.markerId.value).set(markerData);
+    }).toList());
+    debugPrint('Saving markers: $markerList');
+    await prefs.setString('markers', markerList);
   }
-
-  Future<void> _deleteMarkerFromDatabase(MarkerId markerId) async {
-    await _databaseReference.child(markerId.value).remove();
-  }
-
+  
   Future<void> _loadMarkers() async {
-    _databaseReference.once().then((DatabaseEvent event) {
-      final markersData = event.snapshot.value as Map?;
-      if (markersData != null) {
-        final markers = markersData.entries.map((entry) {
-          final data = entry.value as Map;
-          final position = LatLng(data['position']['lat'], data['position']['lng']);
+    final prefs = await SharedPreferences.getInstance();
+    final String? markerListString = prefs.getString('markers');
+    debugPrint('Loading markers: $markerListString');
+    if (markerListString != null) {
+      final List<dynamic> markerList = jsonDecode(markerListString);
+      setState(() {
+        _markers = markerList.map((markerData) {
+          final position = LatLng(markerData['position']['lat'], markerData['position']['lng']);
           return Marker(
-            markerId: MarkerId(entry.key),
+            markerId: MarkerId(position.toString()),
             position: position,
             infoWindow: InfoWindow(
-              title: data['title'],
-              snippet: data['description'],
+              title: markerData['title'],
+              snippet: markerData['description'],
             ),
-            onTap: () => _showMarkerDialog(MarkerId(entry.key), data['title'], data['description']),
+            onTap: () => _showMarkerDialog(MarkerId(position.toString()), markerData['title'], markerData['description']),
           );
         }).toSet();
-
-        setState(() {
-          _markers = markers;
-        });
-      }
-    });
+      });
+    }
   }
+
 
   Future<void> _showAddMarkerDialog(LatLng position) async {
     TextEditingController titleController = TextEditingController();
