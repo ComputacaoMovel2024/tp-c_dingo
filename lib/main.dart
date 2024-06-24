@@ -1,3 +1,5 @@
+import 'package:dingo/games/acelero_game.dart';
+import 'package:dingo/games/gyro_game.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'workshop.dart';
@@ -33,7 +35,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(initialRoute: '/',
+      routes: {
+        '/games': (context) => Games(),
+        '/games/gyro_game': (context) => GyroGameScreen(),
+        '/games/acelero_game': (context) => AceleroGame(),
+      },
       home: Scaffold(
         body: _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(

@@ -13,10 +13,10 @@ final List<String> imgList = [
 
 class Games extends StatefulWidget {
   @override
-  _GamesScreenState createState() => _GamesScreenState();
+  _GamesState createState() => _GamesState();
 }
 
-class _GamesScreenState extends State<Games> {
+class _GamesState extends State<Games> {
   int _currentIndex = 0;
 
   @override
@@ -32,7 +32,6 @@ class _GamesScreenState extends State<Games> {
         ),
         child: Column(
           children: [
-            SizedBox(height: 250.0,),
             CarouselSlider(
               options: CarouselOptions(
                 autoPlay: false,
@@ -82,9 +81,9 @@ class _GamesScreenState extends State<Games> {
             ElevatedButton(
               onPressed: () {
                 if (_currentIndex == 1) {
-                  Navigator.pushNamed(context, '/gyro_game');
+                  Navigator.pushNamed(context, '/games/gyro_game');
                 } else if (_currentIndex == 2) {
-                  Navigator.pushNamed(context, '/acelero_game');
+                  Navigator.pushNamed(context, '/games/acelero_game');
                 }
               },
               child: Text('Jogar'),

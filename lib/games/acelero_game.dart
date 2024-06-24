@@ -4,12 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
 
-class ShakeGame extends StatefulWidget {
+class AceleroGame extends StatefulWidget {
   @override
-  _ShakeGameState createState() => _ShakeGameState();
+  _AceleroGameState createState() => _AceleroGameState();
 }
 
-class _ShakeGameState extends State<ShakeGame> {
+class _AceleroGameState extends State<AceleroGame> {
   double _x = 0.0, _y = 0.0, _z = 0.0;
   DateTime _lastShakeTime = DateTime.now().subtract(Duration(days: 1));
   int _coins = 0;
@@ -90,7 +90,7 @@ class _ShakeGameState extends State<ShakeGame> {
       body: Stack(
         children: [
           Image.asset(
-            'assets/images/background_image.png',
+            'assets/images/background.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -98,6 +98,16 @@ class _ShakeGameState extends State<ShakeGame> {
               print('Erro ao carregar a imagem de fundo: $error');
               return Center(child: Text('Erro ao carregar a imagem de fundo'));
             },
+          ),
+          Positioned(
+            top: 40,
+            left: 10,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
           Center(
             child: Column(
@@ -119,10 +129,9 @@ class _ShakeGameState extends State<ShakeGame> {
                         style: TextStyle(fontSize: 24, color: Colors.white),
                       )
                     : Text(
-                        /*'Faltam ${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inHours} horas, '
-                        '${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inMinutes % 60} minutos e '
-                        '${Duration(hours: 24) - DateTime.now().difference(_lastShakeTime).inSeconds % 60} segundos até poderes agitar novamente!',*/
-                        'Alô',
+                        'Faltam ${(Duration(hours: 24) - DateTime.now().difference(_lastShakeTime)).inHours} horas, '
+                        '${(Duration(hours: 24) - DateTime.now().difference(_lastShakeTime)).inMinutes % 60} minutos e '
+                        '${(Duration(hours: 24) - DateTime.now().difference(_lastShakeTime)).inSeconds % 60} segundos até poderes agitar novamente!',
                         style: TextStyle(fontSize: 24, color: Colors.white),
                       ),
               ],
