@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -95,14 +96,12 @@ class _MapScreenState extends State<MapScreen> {
       'title': marker.infoWindow.title,
       'description': marker.infoWindow.snippet,
     }).toList());
-    debugPrint('Saving markers: $markerList');
     await prefs.setString('markers', markerList);
   }
   
   Future<void> _loadMarkers() async {
     final prefs = await SharedPreferences.getInstance();
     final String? markerListString = prefs.getString('markers');
-    debugPrint('Loading markers: $markerListString');
     if (markerListString != null) {
       final List<dynamic> markerList = jsonDecode(markerListString);
       setState(() {
