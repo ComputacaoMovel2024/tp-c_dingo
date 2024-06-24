@@ -1,4 +1,3 @@
-import 'package:dingo/dart_classes_aux/shared_preferences_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async{
